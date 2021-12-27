@@ -39,9 +39,9 @@ def main():
     from configs.base_config import cfg, cfg_from_file, cfg_update
 
     if args.gan:
-        cfg_from_file("configs/" + args.model + "_gan.yaml")
+        cfg_from_file("configs/" + args.model + "_onet_gan.yaml")
     else:
-        cfg_from_file("configs/" + args.model + ".yaml")
+        cfg_from_file("configs/" + args.model + "_onet.yaml")
     output_dir = cfg_update(args)
 
     # Set up folders for logs and checkpoints
@@ -52,6 +52,7 @@ def main():
     logger = set_logger(os.path.join(cfg.DIR.logs, "log.txt"))
     logger.info("save into dir: %s" % cfg.DIR.logs)
 
+    cfg.DATASET.phase = 'train'
     # Start train/inference process
     if args.gan:
         runners = __import__("runners." + args.model + "_gan_runner")

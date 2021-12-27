@@ -98,8 +98,8 @@ __C.DATASETS.shapenet.n_points = 16384
 # 'GRnet' or 'ShapeNet' version dataset
 __C.DATASETS.shapenet.version = "GRnet"
 __C.DATASETS.shapenet.category_file_path = "./datasets/data/ShapeNet.json"
-__C.DATASETS.shapenet.partial_points_path = "/path/to/datasets/ShapeNetCompletion/%s/partial/%s/%s/%02d.pcd"
-__C.DATASETS.shapenet.complete_points_path = "/path/to/datasets/ShapeNetCompletion/%s/complete/%s/%s.pcd"
+__C.DATASETS.shapenet.partial_points_path = "/home/xieyunwei/SpareNet/data/ShapeNetCompletion/%s/partial/%s/%s/%02d.pcd"
+__C.DATASETS.shapenet.complete_points_path = "/home/xieyunwei/SpareNet/data/ShapeNetCompletion/%s/complete/%s/%s.pcd"
 __C.DATASETS.completion3d = edict()
 __C.DATASETS.completion3d.category_file_path = "/path/to/datasets/data/Completion3D.json"
 __C.DATASETS.completion3d.partial_points_path = "/path/to/datasets/completion3d/data/shapenet/%s/partial/%s/%s.h5"
@@ -108,6 +108,17 @@ __C.DATASETS.kitti = edict()
 __C.DATASETS.kitti.category_file_path = "/path/to/datasets/data/KITTI.json"
 __C.DATASETS.kitti.partial_points_path = "/path/to/datasets/KITTI/cars/%s.pcd"
 __C.DATASETS.kitti.bounding_box_file_path = "/path/to/datasets/KITTI/bboxes/%s.txt"
+
+__C.DATASETS.onet_shapenet = edict()
+__C.DATASETS.onet_shapenet.root = "/home/xieyunwei/occnet_data/ShapeNet.with_depth/"
+__C.DATASETS.onet_shapenet.partial_root = "/home/xieyunwei/occnet_data/ShapeNet.depth_pred.uresnet18.updated/"
+__C.DATASETS.onet_shapenet.n_renderings = 24
+__C.DATASETS.onet_shapenet.depth_pointcloud_mix = True
+__C.DATASETS.onet_shapenet.point_cloud_transfer = 'world_scale_model'
+__C.DATASETS.onet_shapenet.partial_point_cloud_folder = 'depth_pointcloud'
+__C.DATASETS.onet_shapenet.img_folder = 'img'
+__C.DATASETS.onet_shapenet.complete_point_cloud_filename = 'pointcloud_fps_N16384.npz'
+
 
 # Merge config dictionary
 
@@ -149,7 +160,7 @@ def _merge_a_into_b(a, b):
 def cfg_from_file(filename):
     """Load a config file and merge it into the default options."""
     with open(filename, "r", encoding="utf-8") as f:
-        yaml_cfg = edict(yaml.load(f))
+        yaml_cfg = edict(yaml.load(f, Loader=yaml.FullLoader))
 
     _merge_a_into_b(yaml_cfg, __C)
 

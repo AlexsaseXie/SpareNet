@@ -62,6 +62,7 @@ def main():
         logger.error("Please specify the file path of checkpoint.")
         sys.exit(2)
 
+    cfg.DATASET.phase = 'test'
     # Start inference process
     if args.gan:
         runners = __import__("runners." + args.model + "_gan_runner")

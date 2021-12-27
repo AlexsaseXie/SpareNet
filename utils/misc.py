@@ -92,8 +92,8 @@ def checkpoint_save(cfg, epoch_idx, metrics, best_metrics, net_G):
         best_metrics: dic
     """
     # save tbe best model
-    if epoch_idx % cfg.TRAIN.save_freq == 0 or metrics.better_than(best_metrics):
-        file_name = "ckpt-best.pth" if metrics.better_than(best_metrics) else "ckpt-epoch-%03d.pth" % epoch_idx
+    if epoch_idx % cfg.TRAIN.save_freq == 0:
+        file_name = "ckpt-epoch-%03d.pth" % epoch_idx
         output_path = os.path.join(cfg.DIR.checkpoints, file_name)
         # save the epoch and metrics and net_G
         state = {
@@ -104,8 +104,21 @@ def checkpoint_save(cfg, epoch_idx, metrics, best_metrics, net_G):
         torch.save(state, output_path)
 
         logger.info("Saved checkpoint to %s ..." % output_path)
-        if metrics.better_than(best_metrics):
-            best_metrics = metrics
+
+    if metrics.better_than(best_metrics):
+        file_name = "ckpt-best.pth"
+        output_path = os.path.join(cfg.DIR.checkpoints, file_name)
+
+        state = {
+            "epoch_index": epoch_idx,
+            "best_metrics": metrics.state_dict(),
+            "net_G": net_G.state_dict(),
+        }
+        torch.save(state, output_path)
+
+        logger.info("Saved best checkpoint to %s ..." % output_path)
+        best_metrics = metrics
+
     return best_metrics
 
 
