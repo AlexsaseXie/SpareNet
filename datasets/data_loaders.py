@@ -440,6 +440,10 @@ class ONetShapeNetDataLoader(object):
             with open(split_file, 'r') as f:
                 models_c = f.read().split('\n')
             
+            if subset == 'updated_val':
+                idx = np.random.choice(len(models_c), size=20, replace=False)
+                models_c = np.array(models_c)[idx]
+
             for m in tqdm(models_c):
                 partial_point_cloud_root = os.path.join(self.partial_point_cloud_root, c, m, cfg.DATASETS.onet_shapenet.partial_point_cloud_folder)
                 partial_point_cloud_filenames = sorted(glob.glob(os.path.join(partial_point_cloud_root, '*.npz')))
